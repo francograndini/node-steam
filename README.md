@@ -56,72 +56,74 @@ Como o tipo de numero do JavaScript nao tem precisao suficiente para armazenar i
 
 # Enums
 
-Whenever a method accepts (or an event provides) an `ESomething`, it's a Number that represents some enum value. See [enums.steamd](https://github.com/SteamRE/SteamKit/blob/master/Resources/SteamLanguage/enums.steamd) and [eresult.steamd](https://github.com/SteamRE/SteamKit/blob/master/Resources/SteamLanguage/eresult.steamd) for the whole list of them. For each enum, there is an equivalently named property on `Steam`. The property is an object; for each of the enum's members, there is an equivalently named property on the object with an equivalent value.
+Quando um metodo é aceito (ou surge um evento) um `ESomething`, é um numero que representa algum valor ENUM. Veja [enums.steamd](https://github.com/SteamRE/SteamKit/blob/master/Resources/SteamLanguage/enums.steamd) e [eresult.steamd](https://github.com/SteamRE/SteamKit/blob/master/Resources/SteamLanguage/eresult.steamd) para a lista completa deles. Para cada ENUM, existe uma propriedade de nome equivalente na `Steam`. A propriedade é um objeto; para cada um dos membros do ENUM, há uma propriedade de nome equivalente no objeto com um valor equivalente.
 
-Note that you can't easily get the string value from the number, but you probably don't need to. You can still use them in conditions (e.g. `if (type == Steam.EChatEntryType.Emote) ...`) or switch statements.
+Note que vc pode facilmente pegar o valor correspondente para o numero, mas vc provavelmente nao precisará. Voce ainda pode usa-los em condiçoes (e.g. `if (type == Steam.EChatEntryType.Emote) ...`) ou mudar declarações.
 
 # Protobufs
 
-Whenever a method accepts (or an event provides) a `CMsgSomething`, it's an object that represents a protobuf message. It has an equivalently named property for each set field in the specified message with the type as follows:
+Quando um metodo é aceito (ou surge um evento) um `CMsgSomething`, é um objeto que representa uma mensagem protobuf. Ele tem uma propriedade de nome equivalente para cada campo na mensagem especificada com o tipo a seguir:
 
 * `(u)int32` and `fixed32` fields: Number
 * `uint64`, `fixed64` and `string` fields: String
 * `bytes` fields: Buffer objects
 * `bool` fields: Boolean
 
-See the [wiki](https://github.com/seishun/node-steam/wiki/Protobufs) for descriptions of protobuf fields.
+Veja [wiki](https://github.com/seishun/node-steam/wiki/Protobufs) para a descrição de campos de protobuf.
 
-# Handlers
+# Handlers (Manipuladores)
 
-Most of the API is provided by handler classes that internally send and receive low-level client messages using ['message'/send](#messagesend):
+Maior parte do API é fornecido por claases de handler que enviam e recebem internamente mensagens de cliente de nivel baixo usando ['message'/send](#messagesend):
 
-* [SteamUser](lib/handlers/user) - user account-related functionality, including logon.
-* [SteamFriends](lib/handlers/friends) - Community functionality, such as chats and friend messages.
-* [SteamTrading](lib/handlers/trading) - sending and receiving trade requests. Not to be confused with trade offers.
-* [SteamGameCoordinator](lib/handlers/game_coordinator) - sending and receiving Game Coordinator messages.
-* [SteamUnifiedMessages](lib/handlers/unified_messages) - sending and receiving unified messages.
-* [SteamRichPresence](lib/handlers/rich_presence) - sending and receiving Rich Presence messages.
+* [SteamUser](lib/handlers/user) - usuário da conta relacionadas com a funcionalidade, incluindo logon.
+* [SteamFriends](lib/handlers/friends) - funcionalidade da comunidade, como chats e mensagens de amigos.
+* [SteamTrading](lib/handlers/trading) - envio e recebimento de SOLICITAÇÕES de troca. Não confundir com oferta de troca.
+* [SteamGameCoordinator](lib/handlers/game_coordinator) - enviar e receber mensagens do coordenador do jogo.
+* [SteamUnifiedMessages](lib/handlers/unified_messages) - enviar e receber mensagens unificadas.
+* [SteamRichPresence](lib/handlers/rich_presence) - enviar e receber mensagens de presença.
 
-If you think some unimplemented functionality belongs in one of the existing handlers, feel free to submit an issue to discuss it.
-
+[If you think some unimplemented functionality belongs in one of the existing handlers, feel free to submit an issue to discuss it.]
+Não necessario
 # SteamClient
 
-## Properties
+## Propriedades
 
-### connected
+### connected conectado
 
-A boolean that indicates whether you are currently connected and the encryption handshake is complete. ['connected'](#connected-1) is emitted when it changes to `true`, and ['error'](#error) is emitted when it changes to `false` unless you called [disconnect](#disconnect). Sending any client messages is only allowed while this is `true`.
+Um booleano(V/F xD) que indica se vc esta conectado e o cumprimento da encriptação está completo. ['connected'](#connected-1) é emitido quando ele muda para `true`, e ['error'](#error) é emitido quando muda para `false` a menos que vc tenha pedido [disconnect](#disconnect). Enviar qualquer mensagem é apenas permitido quando estiver marcado `true`.
 
 ### loggedOn
 
-A boolean that indicates whether you are currently logged on. Calling any handler methods other than [SteamUser#logOn](lib/handlers/user#logonlogondetails) is only allowed while logged on.
+Um booleano que indica se vc esta logado. Chamando qualquer outro metodo de manipulação que nao seja
+ [SteamUser#logOn](lib/handlers/user#logonlogondetails) só é permitido enquanto logado.
 
 ### sessionID
 
-Your session ID while logged on, otherwise unspecified. (Note: this has nothing to do with the "sessionid" cookie)
+Sua session ID enquanto logado, de outra forma não especificada. (Nota: isso não tem nada a ver com o cookie "sessionid")
 
 ### steamID
 
-Your own SteamID while logged on, otherwise unspecified. Must be set to a valid initial value before sending a logon message ([SteamUser#logOn](lib/handlers/user#logonlogondetails) does that for you).
+Sua própria SteamID enquanto logada, de outra forma não especificada. Deve ser mudada para um valor de inicial válida antes de enviar uma mensagem de logon.
+([SteamUser#logOn](lib/handlers/user#logonlogondetails) faz isso por vc).
 
-## Methods
+## Metodos
 
 ### connect()
 
-Connects to Steam. It will keep trying to reconnect until encryption handshake is complete (see ['connected'](#connected-1)), unless you cancel it with [disconnect](#disconnect).
+Conecta a Steam. Isso vai ficar tentando reconectar até que o cumprimento da encriptação esteja completo (veja ['connected'](#connected-1)), a menos que vc cancele com [disconnect](#disconnect).
 
-You can call this method at any time. If you are already connected, disconnects you first. If there is an ongoing connection attempt, cancels it.
+Vc pode chamar esse metodo a qualquer momento. Se vc ja esta conectado, desconecta vc primeiro. Se houver uma tentativa de conexão acontecendo, cancela ela.
 
 ### disconnect()
 
-Immediately terminates the connection and prevents any events (including ['error'](#error)) from being emitted until you [connect](#connect) again. If you are already disconnected, does nothing. If there is an ongoing connection attempt, cancels it.
-
+Imediatamente termina a conexão e previne qualquer evento (incluindo ['error'](#error)) de ser emitido até que vc [connect](#connect) de novo. Se vc ja esta desconectado, nada acontece. Se há uma tentativa de conexão acontecendo, cancela ela.
 
 ## Events
 
 ### 'error'
 
-Connection closed by the server. Only emitted if the encryption handshake is complete, otherwise it will reconnect automatically. [`loggedOn`](#loggedon) is now `false`.
+Conexão fechada pelo servidor. Apenas emitido se o cumprimento de encriptação for completo, de outra forma irá reconectar automaticamente.
+ [`loggedOn`](#loggedon) agora é `false`.
 
 ### 'connected'
 
