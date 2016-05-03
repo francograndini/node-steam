@@ -127,32 +127,32 @@ Conexão fechada pelo servidor. Apenas emitido se o cumprimento de encriptação
 
 ### 'connected'
 
-Encryption handshake complete. From now on, it's your responsibility to handle disconnections and reconnect (see ['error'](#error)). You'll likely want to log on now (see [SteamUser#logOn](lib/handlers/user#logonlogondetails)).
+Cumprimento de encriptação completo. De agora em diante, é sua responsabilidade manusear as desconexoes e reconexoes (veja ['error'](#error)). Vc provavelmente vai querer logar agora (veja [SteamUser#logOn](lib/handlers/user#logonlogondetails)).
 
 ### 'logOnResponse'
 * [`CMsgClientLogonResponse`](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/steamclient/steammessages_clientserver.proto)
 
-Logon response received. If `eresult` is `EResult.OK`, [`loggedOn`](#loggedon) is now `true`.
+Resposta de logon recebida. Se `eresult` é `EResult.OK`, [`loggedOn`](#loggedon) agora é `true`.
 
 ### 'servers'
-* an Array containing the up-to-date server list
+* uma ordem contendo a lista de server atualizada
 
-node-steam will use this new list when reconnecting, but it will be lost when your application restarts. You might want to save it to a file or a database and assign it to [`Steam.servers`](#servers) before logging in next time.
+node-steam vai usar essa nova lista quando estiver reconectando, mas sera perdida quando a aplicação reiniciar. Vc provavelmente vai querer salvar isto num arquivo ou database para atribuir ela a [`Steam.servers`](#servers) antes de logar da proxima vez.
 
-Note that `Steam.servers` will be automatically updated _after_ this event is emitted. This will be useful if you want to compare the old list with the new one for some reason - otherwise it shouldn't matter.
+Note que `Steam.servers` sera atualizado automaticamente _after_ que este evento for emitido. Isso sera util se vc quiser comparar a antiga lista com a nova por algum motivo - do contrario não terá importancia.
 
 ### 'loggedOff'
 * `EResult`
 
-You were logged off from Steam. [`loggedOn`](#loggedon) is now `false`.
+Vc foi desconectado da Steam. [`loggedOn`](#loggedon) agora é `false`.
 
 
 ## 'message'/send
 
-Sending and receiving client messages is designed to be symmetrical, so the event and the method are documented together. Both have the following arguments:
+Enviar e receber mensagens na steam foi desenvolvido para ser simetrico, entao o evento e o método são documentados juntos. Ambos tem os seguintes argumentos:
 
-* `header` - an object representing the message header. It has the following properties:
+* `header` - um objeto representando o cabeçalho da mensagem. Tem as seguintes propriedades:
   * `msg` - `EMsg` (no protomask).
-  * `proto` - a [`CMsgProtoBufHeader`](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/steamclient/steammessages_base.proto) object if this message is protobuf-backed, otherwise `header.proto` is falsy. The following fields are reserved for internal use and shall be ignored: `steamid`, `client_sessionid`, `jobid_source`, `jobid_target`. (Note: pass an empty object if you don't need to set any fields)
-* `body` - a Buffer containing the rest of the message. (Note: in SteamKit2's terms, this is "Body" plus "Payload")
-* `callback` (optional) - if not falsy, then this message is a request, and `callback` shall be called with any response to it instead of 'message'/send. `callback` has the same arguments as 'message'/send.
+  * `proto` - a [`CMsgProtoBufHeader`](https://github.com/SteamRE/SteamKit/blob/master/Resources/Protobufs/steamclient/steammessages_base.proto) objeto caso essa mensagem é protobuf-backed, do contrario `header.proto` é falsa. Os campos a seguir sao reservados para uso interno e devem ser ignorados: `steamid`, `client_sessionid`, `jobid_source`, `jobid_target`. (Nota: passe um objeto vazio se vc nao precisa mudar nenhum campo)
+* `body` - um Buffer contendo o resto da mensagem. (Nota: nos termos de SteamKit2, isso é "Body" mais "Payload")
+* `callback` (opcional) - se nao sao falsas, entao essa mensagem é um pedido, e `callback` deve ser chamada com qualquer resposta a isto ao inves de 'message'/send. `callback` tem os mesmos argumentos de 'message'/send.
