@@ -19,17 +19,17 @@ Nota: quando instalar do git, voce tem que executar adicionalmente 'npm install'
 **Nota: apenas Node.js v4.1.1 e acima são suportados.**
 
 # Uso
-First, `require` this module.
+Primeiro, `require` este módulo.
 ```js
 var Steam = require('steam');
 ```
-`Steam` is now a namespace object containing:
+`Steam` é agora um 'namespace object' contendo:
 * [SteamClient class](#steamclient)
 * [Several handler classes](#handlers)
 * [`servers` property](#servers)
 * [Enums](#enums)
 
-Then you'll want to create an instance of SteamClient and any handlers you need, call [SteamClient#connect](#connect) and assign event listeners.
+Enm seguida voce ira querer criar uma instancia do SteamClient e 'quaisquer manipuladores que vc precise'?(n entendi), chame [SteamClient#connect](#connect) 'e atribua ouvintes de eventos'.
 
 ```js
 var steamClient = new Steam.SteamClient();
@@ -44,15 +44,15 @@ steamClient.on('connected', function() {
 steamClient.on('logOnResponse', function() { /* ... */});
 ```
 
-See example.js for the usage of some of the available API.
+Veja example.js para a utilização de algumas API's disponíveis.
 
-# Servers
+# Servidores
 
-`Steam.servers` contains the list of CM servers node-steam will attempt to connect to. The bootstrapped list (see [servers.js](https://github.com/seishun/node-steam/blob/master/lib/servers.js)) is not always up-to-date and might contain dead servers. To avoid timeouts, replace it with your own list before logging in if you have one (see ['servers' event](#servers-1)).
+`Steam.servers` contem a lista de servidores CM a que o node-steam vai tentar se conectar. A lista de inicialização (veja [servers.js](https://github.com/seishun/node-steam/blob/master/lib/servers.js)) não está sempre atualizada e pode conter servers "mortos". Para evitar timeouts, substitua-a com sua propria lista antes de logar, caso vc tenha uma (veja ['servers' event](#servers-1)).
 
 # SteamID
 
-Since JavaScript's Number type does not have enough precision to store 64-bit integers, SteamIDs are represented as decimal strings. (Just wrap the number in quotes)
+Como o tipo de numero do JavaScript nao tem precisao suficiente para armazenar inteiros de 64-bit, SteamIDs são representadas como cordas decimais. (Basta "enrolar" o nr entre aspas)
 
 # Enums
 
