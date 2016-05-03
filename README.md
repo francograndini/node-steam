@@ -5,7 +5,7 @@
 [![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Y83UZQZBJXEXQ&item_name=node%2dsteam&currency_code=EUR
  "Donate once-off to this project using PayPal")
 
-This is a Node.js port of [SteamKit2](https://github.com/SteamRE/SteamKit). It lets you interface with Steam without running an actual Steam client. Could be used to run an autonomous chat/trade bot.
+Esta é uma porta Node.js do [SteamKit2](https://github.com/SteamRE/SteamKit). Ela permite você utilizar a interface Steam sem ter que rodar um Steam Client. Pode ser usada pra rodar um Bot de chat/troca autonomo.
 
 
 # Instalação
@@ -14,11 +14,11 @@ This is a Node.js port of [SteamKit2](https://github.com/SteamRE/SteamKit). It l
 npm install steam
 ```
 
-Note: when installing from git, you have to additionally run `npm install` inside `steam/node_modules/steam-resources` to run the `prepublish` script (see [npm/npm#3055](https://github.com/npm/npm/issues/3055)). It pulls Steam resources (Protobufs and SteamLanguage) from SteamKit2 and requires `svn`.
+Nota: quando instalar do git, voce tem que executar adicionalmente 'npm install' dentro de 'steam/node_modules/steam-resources' para rodar o `prepublish` script (veja [npm/npm#3055](https://github.com/npm/npm/issues/3055)). Pq puxa os recursos Steam (Protobufs and SteamLanguage) de SteamKit2 e requer `svn`.
 
-**Note: only Node.js v4.1.1 and above is supported.**
+**Nota: apenas Node.js v4.1.1 e acima são suportados.**
 
-# Usage
+# Uso
 First, `require` this module.
 ```js
 var Steam = require('steam');
